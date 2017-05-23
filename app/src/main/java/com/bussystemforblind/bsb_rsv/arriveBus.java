@@ -37,6 +37,11 @@ public class arriveBus extends AppCompatActivity {
         routeId = intent.getStringExtra("routeId");
         dtnStation = intent.getStringExtra("Destination");
 
+
+
+        /*비콘으로 버스와 나의 거리를 측정하여 탑승여부 확인*/
+        /*서버에 결제정보 전송*/
+        /*결제정보 전송 확인후 다음 페이지로 이동*/
         linearLayout = (LinearLayout)findViewById(R.id.activity_arrive_bus);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +56,5 @@ public class arriveBus extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
-
-        /*비콘으로 버스와 나의 거리를 측정하여 탑승여부 확인*/
     }
 }

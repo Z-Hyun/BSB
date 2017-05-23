@@ -297,7 +297,9 @@ public class BusAPI {
             endIndex = 0;
             startIndex = sb.indexOf("<locationNo1>")+13;
             endIndex = sb.indexOf("</locationNo1>",startIndex+1);
-            busArrival=sb.substring(startIndex,endIndex);
+            if(startIndex<endIndex){
+                busArrival=sb.substring(startIndex,endIndex);
+            }
         }while(startIndex>sb.length());
 
         return busArrival;

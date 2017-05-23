@@ -2,6 +2,7 @@ package com.bussystemforblind.bsb_rsv;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class estTime extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_est_time);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectNetwork().penaltyLog().build());
 
         /*상단바 디자인*/
         try {
@@ -97,12 +100,14 @@ public class estTime extends AppCompatActivity {
         reBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), estTime.class);
-                intent.putExtra("busNumber", busNumber);
-                intent.putExtra("Destination", dtnStation);
-                intent.putExtra("stationId", stationId);
-                intent.putExtra("routeId",routeId);
-                startActivity(intent);
+                try {
+                    staOrder=api.getStaOrder(routeId,busNumber);
+                    busArrival=api.getBusArrival(stationId,routeId,staOrder);
+                    //busId=api.getBusId(stationId,routeId,staOrder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                estTv.setText(busNumber+" 번 버스\n\n"+busArrival+"번째 전 정류장\n\n" + "위치해 있습니다.");
             }
         });
 
@@ -110,12 +115,14 @@ public class estTime extends AppCompatActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), estTime.class);
-                intent.putExtra("busNumber", busNumber);
-                intent.putExtra("Destination", dtnStation);
-                intent.putExtra("stationId", stationId);
-                intent.putExtra("routeId",routeId);
-                startActivity(intent);
+                try {
+                    staOrder=api.getStaOrder(routeId,busNumber);
+                    busArrival=api.getBusArrival(stationId,routeId,staOrder);
+                    //busId=api.getBusId(stationId,routeId,staOrder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                estTv.setText(busNumber+" 번 버스\n\n"+busArrival+"번째 전 정류장\n\n" + "위치해 있습니다.");
             }
         });
 
@@ -135,8 +142,11 @@ public class estTime extends AppCompatActivity {
                     }
                 });
 
+                Log.d("5초마다", "ㅋㅋ");
+
                 /*버스가 전정류장에 도착시*/
                 if(busArrival.equals("1")){
+                    mTimer.cancel();
                     Intent intent1 = new Intent(getApplicationContext(), arriveBus.class);
                     intent1.putExtra("busNumber", busNumber);
                     intent1.putExtra("Destination", dtnStation);
@@ -147,7 +157,7 @@ public class estTime extends AppCompatActivity {
             }
         };
         mTimer = new Timer();
-        mTimer.schedule(mTask, 5000); // 5초
+        mTimer.schedule(mTask, 5000, 5000); // 5초
         Log.d("TimerTask", "실행");
 
     }
