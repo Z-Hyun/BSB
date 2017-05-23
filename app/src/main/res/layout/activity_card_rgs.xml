@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bussystemforblind.bsb.CardRgs"
+    tools:context="com.bussystemforblind.bsb_rsv.CardRgs"
     android:orientation="vertical">
 
     <TextView

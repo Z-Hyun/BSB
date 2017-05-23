@@ -26,6 +26,12 @@
         <activity android:name=".arriveBus" />
         <activity android:name=".busStop" />
         <activity android:name=".busStop2"></activity>
+        <activity android:name=".Card"/>
+        <activity android:name=".CardRgs"/>
+        <activity android:name=".CardRmv"/>
+        <activity android:name=".CardShow"/>
+        <activity android:name=".stt_test"/>
+
     </application>
 
 </manifest>
