@@ -89,6 +89,7 @@ public class estTime extends AppCompatActivity {
         cancleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mTimer.cancel();
                 Toast toast = Toast.makeText(getApplicationContext(), "예약이 취소되었습니다.", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();

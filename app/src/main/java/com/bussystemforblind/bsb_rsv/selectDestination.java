@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -42,21 +43,30 @@ public class selectDestination extends AppCompatActivity {
             System.out.println(e.getMessage());
         }
 
+        /*이전 페이지에서 넘어온 데이터*/
         Intent intent = getIntent();
         final String busNumber = intent.getStringExtra("busNumber");
         final String stationId = intent.getStringExtra("stationId");
 
+        /*목적지 정류장 List 가져오기*/
         String busStopList = "";
         try {
             routeId = busAPI.getRouteId(busNumber);
-            busStopList=busAPI.busStop(routeId);
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectNetwork().penaltyLog().build());
+            busStopList=busAPI.busStop(routeId, stationId);         // busStopList : 목적지 정류장들 List(","로 구분되어있는 String 문자열)
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        /*List가 비었을 때*/
         if(busStopList.equals("")){
             busStopList = "";
+            Toast toast = Toast.makeText(getApplicationContext(), "정류장이 존재하지 않습니다.", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
         }
+
+        /*정류장 List 나열, 클릭시 예약 페이지로 이동*/
         topLL = (LinearLayout)findViewById(R.id.dynamicArea);
 
         tmp = "";

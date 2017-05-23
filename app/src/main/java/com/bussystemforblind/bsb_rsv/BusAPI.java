@@ -148,14 +148,14 @@ public class BusAPI {
         return routeId;
     }
 
-    public String busStop(String routeId) throws IOException {
+    public String busStop(String routeId, String stationId) throws IOException {
 
         StringBuilder urlBuilder = new StringBuilder("http://openapi.gbis.go.kr/ws/rest/busrouteservice/station"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + serviceKey); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("routeId","UTF-8") + "=" + URLEncoder.encode(routeId, "UTF-8")); /*노선 ID*/
         URL url = new URL(urlBuilder.toString());
 
-        int startIndex= 14;
+        int startIndex= 0;
         int endIndex = 0;
         StringBuilder sb;
         String stationName = "";
@@ -180,17 +180,33 @@ public class BusAPI {
             conn.disconnect();
             System.out.println(sb.toString());
 
-            startIndex= 14;
+            startIndex= 12;
             endIndex = 0;
 
-            while(startIndex>13){
-                startIndex = sb.indexOf("<stationName>",startIndex+1)+13;
-                endIndex = sb.indexOf("</stationName>",endIndex+1);
-                if(startIndex>13){
-                    stationName = stationName+","+sb.substring(startIndex,endIndex);
-                    Log.d("BusList",sb.substring(startIndex,endIndex));
+            while(startIndex>11){
+                startIndex = sb.indexOf("<stationId>",startIndex)+11;
+                endIndex = sb.indexOf("</stationId>",endIndex+1);
+                Log.d("starIndex", Integer.toString(startIndex));
+                Log.d("endIndex", Integer.toString(endIndex));
+                Log.d("stationId",sb.substring(startIndex,endIndex)+", "+stationId);
+                if(sb.substring(startIndex,endIndex).equals(stationId)){
+                    break;
                 }
             }
+
+            int turnIndex = sb.indexOf("<turnYn>Y", startIndex);
+
+            while(startIndex>0&&endIndex>0&& startIndex<turnIndex && endIndex<turnIndex){
+                startIndex = sb.indexOf("<stationName>",startIndex)+13;
+                endIndex  = sb.indexOf("</stationName>",endIndex+1);
+                if(startIndex>0&&endIndex>0&& startIndex<turnIndex && endIndex<turnIndex){
+                    Log.d("starIndex", Integer.toString(startIndex));
+                    Log.d("endIndex", Integer.toString(endIndex));
+                    stationName = stationName +"," +sb.substring(startIndex,endIndex);
+                    Log.d("stationName", sb.substring(startIndex,endIndex));
+                }
+            }
+
         }while(startIndex>sb.length());
 
         return stationName;
