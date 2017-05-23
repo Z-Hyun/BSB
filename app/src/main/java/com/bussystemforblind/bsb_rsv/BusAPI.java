@@ -321,4 +321,51 @@ public class BusAPI {
         return busArrival;
     }
 
+    public String getBusId(String stationId, String routeId, String staOrder) throws IOException{
+        StringBuilder urlBuilder = new StringBuilder("http://openapi.gbis.go.kr/ws/rest/busarrivalservice"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + serviceKey); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("stationId","UTF-8") + "=" + URLEncoder.encode(stationId, "UTF-8")); /*정류소 ID*/
+        urlBuilder.append("&" + URLEncoder.encode("routeId","UTF-8") + "=" + URLEncoder.encode(routeId, "UTF-8")); /*노선 아이디*/
+        urlBuilder.append("&" + URLEncoder.encode("staOrder","UTF-8") + "=" + URLEncoder.encode(staOrder, "UTF-8")); /*노선의 정류소 순번*/
+        URL url = new URL(urlBuilder.toString());
+
+        int startIndex= 0;
+        int endIndex = 0;
+        StringBuilder sb;
+        String busId="";
+
+        do{
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-type", "application/json");
+            System.out.println("Response code: " + conn.getResponseCode());
+            BufferedReader rd;
+            if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+            sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            rd.close();
+            conn.disconnect();
+            System.out.println(sb.toString());
+
+            Log.d("getBusId", sb.toString());
+
+            startIndex= 0;
+            endIndex = 0;
+            startIndex = sb.indexOf("<plateNo1>")+10;
+            endIndex = sb.indexOf("</plateNo1>",startIndex+1);
+
+            if(startIndex<endIndex){
+                busId=sb.substring(startIndex,endIndex);
+            }
+        }while(startIndex>sb.length());
+
+        return busId;
+    }
 }

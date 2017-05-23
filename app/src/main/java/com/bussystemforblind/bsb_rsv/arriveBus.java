@@ -12,12 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class arriveBus extends AppCompatActivity {
-    LinearLayout linearLayout;
 
-    String busNumber;
-    String stationId;
-    String routeId;
-    String dtnStation;
+    String busNumber, stationId, routeId, dtnStation, busId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +35,7 @@ public class arriveBus extends AppCompatActivity {
         stationId = intent.getStringExtra("stationId");
         routeId = intent.getStringExtra("routeId");
         dtnStation = intent.getStringExtra("Destination");
+        busId = intent.getStringExtra("busId");
 
 
 
@@ -52,30 +50,17 @@ public class arriveBus extends AppCompatActivity {
 
         /*결제정보 전송 확인후 다음 페이지로 이동*/
         if(msg.equals("1")){
+            /*
             Toast toast2 = Toast.makeText(getApplicationContext(), "버스요금 결제가 완료되었습니다.", Toast.LENGTH_LONG);
             toast2.show();
+            */
             Intent intent1 = new Intent(getApplicationContext(), busStop.class);
             intent1.putExtra("busNumber", busNumber);
             intent1.putExtra("Destination", dtnStation);
             intent1.putExtra("stationId", stationId);
             intent1.putExtra("routeId",routeId);
+            intent1.putExtra("busId", busId);
             startActivity(intent1);
         }
-
-
-        linearLayout = (LinearLayout)findViewById(R.id.activity_arrive_bus);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(getApplicationContext(), "버스요금 결제가 완료되었습니다.", Toast.LENGTH_LONG);
-                toast.show();
-                Intent intent1 = new Intent(getApplicationContext(), busStop.class);
-                intent1.putExtra("busNumber", busNumber);
-                intent1.putExtra("Destination", dtnStation);
-                intent1.putExtra("stationId", stationId);
-                intent1.putExtra("routeId",routeId);
-                startActivity(intent1);
-            }
-        });
     }
 }

@@ -59,7 +59,7 @@ public class estTime extends AppCompatActivity {
         try {
             staOrder=api.getStaOrder(routeId,busNumber);
             busArrival=api.getBusArrival(stationId,routeId,staOrder);
-            //busId=api.getBusId(stationId,routeId,staOrder);
+            busId=api.getBusId(stationId,routeId,staOrder);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,6 @@ public class estTime extends AppCompatActivity {
                 try {
                     staOrder=api.getStaOrder(routeId,busNumber);
                     busArrival=api.getBusArrival(stationId,routeId,staOrder);
-                    //busId=api.getBusId(stationId,routeId,staOrder);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -149,6 +148,7 @@ public class estTime extends AppCompatActivity {
                     intent1.putExtra("Destination", dtnStation);
                     intent1.putExtra("stationId", stationId);
                     intent1.putExtra("routeId",routeId);
+                    intent1.putExtra("busId", busId);
                     startActivity(intent1);
                 }
             }
