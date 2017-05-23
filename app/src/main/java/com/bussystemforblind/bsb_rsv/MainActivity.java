@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button busRsv;
+    Button cardRgs,busRsv;
     BusAPI api = new BusAPI();
     String stationId="";
 
@@ -31,6 +31,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /*비콘 연결해서 정류장번호 얻음*/
+
+        /*카드등록 버튼 눌리면*/
+        cardRgs = (Button)findViewById(R.id.cardRgs);
+        cardRgs.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view){
+
+                Intent intent2 = new Intent(MainActivity.this,Card.class);
+                startActivity(intent2);
+            }
+        });
 
         /*예약하기 버튼이 눌리면*/
         busRsv = (Button)findViewById(R.id.BusRsv);

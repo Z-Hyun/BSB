@@ -64,20 +64,6 @@ public class estTime extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        /*도착예정버스의 교유번호, 정류장ID 서버에 전송*/
-        /*
-        SocketManager manager = SocketManager.getManager();
-        manager.sendMsg("99");
-        String msg = manager.getMsg();
-        Log.d("MSG",msg);
-        Log.d("MainActivity", "완료");
-
-        Toast toast = Toast.makeText(getApplicationContext(), "소켓통신 "+msg, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER,0,0);
-        toast.show();
-        */
-        /*******/
-
         estTv = (TextView)findViewById(R.id.estTime);
         estTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         estTv.setGravity(Gravity.CENTER_VERTICAL);
@@ -148,6 +134,16 @@ public class estTime extends AppCompatActivity {
                 /*버스가 전정류장에 도착시*/
                 if(busArrival.equals("1")){
                     mTimer.cancel();
+
+                    /*도착예정버스의 교유번호, 정류장ID 서버에 전송*/
+                    SocketManager manager = SocketManager.getManager();
+                    //manager.sendMsg("2-"+busId+"-"+stationId);
+                    manager.sendMsg("2-0-"+stationId);
+                    String msg = manager.getMsg();
+                    Log.d("MSG",msg);
+
+                    /*비콘 정보 받기*/
+
                     Intent intent1 = new Intent(getApplicationContext(), arriveBus.class);
                     intent1.putExtra("busNumber", busNumber);
                     intent1.putExtra("Destination", dtnStation);
